@@ -16,13 +16,6 @@ function HomePage() {
         "https://images.unsplash.com/photo-1602271886918-bafecc837c7a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8c29tZXxlbnwwfHwwfHx8MA%3D%3D&w=1000&q=80",
       address: "different 421323,soem some",
     },
-    {
-      id: "m1",
-      title: " meetup",
-      image:
-        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTq0seAgwWwGnXdrR5YIoeHRbHkvogF-S46FcWFR3m1&s",
-      address: "address 421323,soem some",
-    },
   ];
   return <MeetupList meetups={meetups} />;
 }
