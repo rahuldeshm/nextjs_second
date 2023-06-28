@@ -2,7 +2,6 @@ import React from "react";
 import classes from "./MeetupDetails.module.css";
 
 function MeetupDetails(props) {
-  console.log(props);
   const item = !!props.item ? props.item : {};
   return (
     <div className={classes.detail}>
