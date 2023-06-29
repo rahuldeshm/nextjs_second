@@ -47,7 +47,7 @@ export async function getStaticProps() {
           };
         }),
       },
-      revalidate: 3600,
+      revalidate: 60,
     };
   } catch (err) {
     console.log(err);
