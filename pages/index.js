@@ -1,9 +1,21 @@
 import MeetupList from "@/components/meetups/MeetupList";
 import React, { useEffect, useState } from "react";
 import { MongoClient } from "mongodb";
+import Head from "next/head";
 
 function HomePage(props) {
-  return <MeetupList meetups={props.meetups} />;
+  return (
+    <>
+      <Head>
+        <title>meetups</title>
+        <meta
+          name="description"
+          content="can access the meetups data here on one clidk"
+        />
+      </Head>
+      <MeetupList meetups={props.meetups} />
+    </>
+  );
 }
 // export async function getServerSideProps(context) {
 //   //context => will have req and res properties we can access

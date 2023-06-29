@@ -1,46 +1,68 @@
 import MeetupDetails from "../../components/meetups/MeetupDetails";
-import { useRouter } from "next/router";
+import { MongoClient, ObjectId } from "mongodb";
+import Head from "next/head";
 import React from "react";
 
 function MeetDetails(props) {
   // const router = useRouter();
   // const id = router.query.meetupId;
   // const item = meetups.find((e) => e.id === id);
-  return <MeetupDetails item={props.item} />;
+  return (
+    <>
+      <Head>
+        <title>{props.item.title}</title>
+        <meta name={props.item.title} content={props.item.description} />
+      </Head>
+      <MeetupDetails item={props.item} />
+    </>
+  );
 }
+
 export async function getStaticPaths() {
-  return {
-    fallback: false,
-    paths: [
-      {
-        params: {
-          meetupId: "m1",
-        },
-      },
-      {
-        params: {
-          meetupId: "m2",
-        },
-      },
-    ],
-  };
+  try {
+    const client = await MongoClient.connect(
+      "mongodb+srv://rahuldeshmukh4545:lAfW3iAC3x3zdDQv@cluster0.f5cboss.mongodb.net/mongodatabase?retryWrites=true&w=majority"
+    );
+    const db = client.db();
+    const meetupsCollection = db.collection("meetups");
+    const meetups = await meetupsCollection.find({}, { _id: 1 }).toArray();
+    return {
+      fallback: false,
+      paths: meetups.map((e) => {
+        return { params: { meetupId: e._id.toString() } };
+      }),
+    };
+  } catch (err) {
+    console.log(err);
+  }
 }
 export async function getStaticProps(context) {
   //cant use hooks here.
   //fetch the data for single meetup
   const meetupId = context.params.meetupId;
-  console.log(meetupId);
-  return {
-    props: {
-      item: {
-        id: "m2",
-        title: "another meetup",
-        image:
-          "https://images.unsplash.com/photo-1602271886918-bafecc837c7a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8c29tZXxlbnwwfHwwfHx8MA%3D%3D&w=1000&q=80",
-        address: "different 421323,soem some",
+  try {
+    const client = await MongoClient.connect(
+      "mongodb+srv://rahuldeshmukh4545:lAfW3iAC3x3zdDQv@cluster0.f5cboss.mongodb.net/mongodatabase?retryWrites=true&w=majority"
+    );
+    const db = client.db();
+    const meetupsCollection = db.collection("meetups");
+    const selectedMeetup = await meetupsCollection.findOne({
+      _id: new ObjectId(meetupId),
+    });
+
+    return {
+      props: {
+        item: {
+          id: meetupId,
+          title: selectedMeetup.title,
+          image: selectedMeetup.image,
+          address: selectedMeetup.address,
+        },
       },
-    },
-  };
+    };
+  } catch (err) {
+    console.log("err");
+  }
 }
 
 export default MeetDetails;
